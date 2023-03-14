@@ -2,28 +2,42 @@ import * as THREE from 'three';
 import { createStars } from './stars.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.6, 1200);
-camera.position.z = 100;
+let camera, controls, scene, renderer;
+init();
+animate();
 
-const renderer = new THREE.WebGLRenderer({antialias: true});
-renderer.setClearColor("#262a34");
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+function init(){
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.6, 1200);
+    camera.position.z = 100;
+    
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setClearColor("#262a34");
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    
+    initializeControls();
+    
+    createStars(scene);
+    renderer.render( scene, camera );
+}
 
-/*
-//Orbit Controls
-const controls = new OrbitControls( camera, renderer.domElement );
+function animate(){
+    requestAnimationFrame( animate );
+    controls.update();
+    renderer.render( scene, camera );
+}
 
-function animate() {
-    // any other animations
-    controls.update()
- }
- animate();
-*/
-createStars(scene);
-renderer.render( scene, camera );
-
+function initializeControls(){
+    //Orbit Controls
+    controls = new OrbitControls( camera, renderer.domElement );
+    controls.enableDamping = true;
+	controls.dampingFactor = 0.05;
+    controls.screenSpacePanning = false;
+    controls.minDistance = 100;
+    controls.maxDistance = 500;
+    controls.maxPolarAngle = Math.PI / 2;
+}
 
 // Resize to make responsive, but only after user stops resizing
 function debounce(func){
