@@ -19,15 +19,4 @@ function createStars(scene) {
     }
 }
 
-function updateStars(scene) {
-    console.log(sphereList.length);
-    //Remove old stars
-    for (let i = 0; i < sphereList.length; i++) {
-        scene.remove(sphereList[i]);
-    }
-    sphereList = [];
-    //Add new stars
-    createStars(scene);
-}
-
-export { createStars, updateStars };
+export { createStars };

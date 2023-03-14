@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { createStars, updateStars } from './stars.js';
+import { createStars } from './stars.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.6, 1200);
@@ -10,8 +11,19 @@ renderer.setClearColor("#262a34");
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+/*
+//Orbit Controls
+const controls = new OrbitControls( camera, renderer.domElement );
+
+function animate() {
+    // any other animations
+    controls.update()
+ }
+ animate();
+*/
 createStars(scene);
 renderer.render( scene, camera );
+
 
 // Resize to make responsive, but only after user stops resizing
 function debounce(func){
@@ -26,6 +38,5 @@ window.addEventListener('resize', debounce(function(e) {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    updateStars(scene);
     renderer.render( scene, camera );
 }, true));
