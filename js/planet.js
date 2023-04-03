@@ -1,19 +1,21 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 function generatePlanets(scene){
-    const earth = createPlanet(16, 32, 0, 0, 0);
+    const loader = new GLTFLoader();
 
-    scene.add(earth);
-}
-
-// Create planet
-function createPlanet(radius, segments, x, y, z){
-    const geometry = new THREE.SphereGeometry(radius, segments, segments);
-    const material = new THREE.MeshBasicMaterial({ 
-        map: new THREE.TextureLoader().load('assets/images/earth.jpg')});
-    const sphere = new THREE.Mesh(geometry, material);
-    sphere.position.set(x, y, z);
-    return sphere;
+    const onLoad = (result, position) => {
+        const model = result.scene.children[0];
+        model.position.copy(position);
+        model.scale.set(20, 20, 20);
+        var light = new THREE.DirectionalLight(0xffffff, 5)
+        scene.add(light);
+        scene.add(model);
+    }
+        
+    // Earth
+    const planetPosition = new THREE.Vector3(0, 0, 2.5);
+    loader.load("../assets/planets/earth.glb", (gltf) => onLoad(gltf, planetPosition));
 }
 
 export { generatePlanets };
